@@ -1,0 +1,187 @@
+import java.util.Scanner;
+
+/////////////////////////////
+// NODO
+/////////////////////////////
+
+class Nodo {
+
+    int dato;
+    Nodo siguiente;
+
+    // Constructor
+    public Nodo(int dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+}
+
+/////////////////////////////
+// LISTA ENLAZADA
+/////////////////////////////
+
+class ListaEnlazada {
+
+    Nodo cabeza;
+
+    // Crear lista vacia
+    public ListaEnlazada() {
+        cabeza = null;
+    }
+
+    /////////////////////////////
+    // INSERTAR AL FINAL
+    /////////////////////////////
+
+    public void insertar(int dato) {
+
+        Nodo nuevo = new Nodo(dato);
+
+        // Si la lista esta vacia
+        if (cabeza == null) {
+            cabeza = nuevo;
+        } else {
+
+            Nodo actual = cabeza;
+
+            // Recorrer hasta el ultimo nodo
+            while (actual.siguiente != null) {
+                actual = actual.siguiente;
+            }
+
+            actual.siguiente = nuevo;
+        }
+
+        System.out.println("Nodo insertado: " + dato);
+    }
+
+    /////////////////////////////
+    // ELIMINAR NODO
+    /////////////////////////////
+
+    public void eliminar(int dato) {
+
+        if (cabeza == null) {
+            System.out.println("La lista esta vacia");
+            return;
+        }
+
+        // Si el nodo a eliminar es la cabeza
+        if (cabeza.dato == dato) {
+            cabeza = cabeza.siguiente;
+            System.out.println("Nodo eliminado: " + dato);
+            return;
+        }
+
+        Nodo actual = cabeza;
+
+        while (actual.siguiente != null &&
+               actual.siguiente.dato != dato) {
+
+            actual = actual.siguiente;
+        }
+
+        // Si no existe el dato
+        if (actual.siguiente == null) {
+            System.out.println("Nodo no encontrado");
+        } else {
+
+            actual.siguiente = actual.siguiente.siguiente;
+
+            System.out.println("Nodo eliminado: " + dato);
+        }
+    }
+
+    /////////////////////////////
+    // MOSTRAR LISTA
+    /////////////////////////////
+
+    public void mostrar() {
+
+        if (cabeza == null) {
+            System.out.println("Lista vacia");
+            return;
+        }
+
+        Nodo actual = cabeza;
+
+        System.out.print("Lista: ");
+
+        while (actual != null) {
+
+            System.out.print(actual.dato + " -> ");
+
+            actual = actual.siguiente;
+        }
+
+        System.out.println("NULL");
+    }
+}
+
+/////////////////////////////
+// MAIN
+/////////////////////////////
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        ListaEnlazada lista = new ListaEnlazada();
+
+        int opcion;
+        int valor;
+
+        do {
+
+            System.out.println("\n===== MENU =====");
+            System.out.println("1. Insertar nodo");
+            System.out.println("2. Eliminar nodo");
+            System.out.println("3. Mostrar lista");
+            System.out.println("4. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = sc.nextInt();
+
+            switch(opcion) {
+
+                case 1:
+
+                    System.out.print("Ingrese dato: ");
+                    valor = sc.nextInt();
+
+                    lista.insertar(valor);
+
+                    break;
+
+                case 2:
+
+                    System.out.print("Ingrese dato a eliminar: ");
+                    valor = sc.nextInt();
+
+                    lista.eliminar(valor);
+
+                    break;
+
+                case 3:
+
+                    lista.mostrar();
+
+                    break;
+
+                case 4:
+
+                    System.out.println("Fin del programa");
+                    break;
+
+                default:
+
+                    System.out.println("Opcion incorrecta");
+            }
+
+        } while(opcion != 4);
+
+        sc.close();
+    }
+}

@@ -1,0 +1,311 @@
+import java.util.Scanner;
+
+/////////////////////////////
+// COLA CIRCULAR
+/////////////////////////////
+
+class ColaCircular {
+
+    private int frente;
+    private int fin;
+    private int capacidad;
+    private int[] cola;
+
+    public ColaCircular(int tamaño) {
+        capacidad = tamaño;
+        cola = new int[capacidad];
+        frente = -1;
+        fin = -1;
+    }
+
+    public boolean estaVacia() {
+        return frente == -1;
+    }
+
+    public boolean estaLlena() {
+        return (fin + 1) % capacidad == frente;
+    }
+
+    public void enqueue(int valor) {
+
+        if (estaLlena()) {
+            System.out.println("La cola esta llena");
+            return;
+        }
+
+        if (estaVacia()) {
+            frente = 0;
+        }
+
+        fin = (fin + 1) % capacidad;
+        cola[fin] = valor;
+
+        System.out.println("Insertado: " + valor);
+    }
+
+    public void dequeue() {
+
+        if (estaVacia()) {
+            System.out.println("La cola esta vacia");
+            return;
+        }
+
+        System.out.println("Eliminado: " + cola[frente]);
+
+        if (frente == fin) {
+            frente = -1;
+            fin = -1;
+        } else {
+            frente = (frente + 1) % capacidad;
+        }
+    }
+
+    public void mostrar() {
+
+        if (estaVacia()) {
+            System.out.println("Cola vacia");
+            return;
+        }
+
+        System.out.print("Cola Circular: ");
+
+        int i = frente;
+
+        while (true) {
+
+            System.out.print(cola[i] + " ");
+
+            if (i == fin)
+                break;
+
+            i = (i + 1) % capacidad;
+        }
+
+        System.out.println();
+    }
+}
+
+/////////////////////////////
+// COLA ENLAZADA
+/////////////////////////////
+
+class Nodo {
+    int dato;
+    Nodo siguiente;
+
+    public Nodo(int dato) {
+        this.dato = dato;
+        this.siguiente = null;
+    }
+}
+
+class ColaEnlazada {
+
+    private Nodo frente;
+    private Nodo fin;
+
+    public ColaEnlazada() {
+        frente = null;
+        fin = null;
+    }
+
+    public boolean estaVacia() {
+        return frente == null;
+    }
+
+    public void enqueue(int valor) {
+
+        Nodo nuevo = new Nodo(valor);
+
+        if (estaVacia()) {
+            frente = nuevo;
+            fin = nuevo;
+        } else {
+            fin.siguiente = nuevo;
+            fin = nuevo;
+        }
+
+        System.out.println("Insertado: " + valor);
+    }
+
+    public void dequeue() {
+
+        if (estaVacia()) {
+            System.out.println("Cola vacia");
+            return;
+        }
+
+        System.out.println("Eliminado: " + frente.dato);
+
+        frente = frente.siguiente;
+
+        if (frente == null) {
+            fin = null;
+        }
+    }
+
+    public void mostrar() {
+
+        Nodo actual = frente;
+
+        System.out.print("Cola Enlazada: ");
+
+        while (actual != null) {
+            System.out.print(actual.dato + " ");
+            actual = actual.siguiente;
+        }
+
+        System.out.println();
+    }
+}
+
+/////////////////////////////
+// COLA CON PRIORIDAD
+/////////////////////////////
+
+class ColaPrioridad {
+
+    private int[] cola;
+    private int size;
+
+    public ColaPrioridad() {
+        cola = new int[100];
+        size = 0;
+    }
+
+    public boolean estaVacia() {
+        return size == 0;
+    }
+
+    public void enqueue(int valor) {
+
+        int i;
+
+        for (i = size - 1; i >= 0; i--) {
+
+            if (valor > cola[i]) {
+                cola[i + 1] = cola[i];
+            } else {
+                break;
+            }
+        }
+
+        cola[i + 1] = valor;
+        size++;
+
+        System.out.println("Insertado: " + valor);
+    }
+
+    public void dequeue() {
+
+        if (estaVacia()) {
+            System.out.println("Cola vacia");
+            return;
+        }
+
+        System.out.println("Eliminado: " + cola[0]);
+
+        for (int i = 0; i < size - 1; i++) {
+            cola[i] = cola[i + 1];
+        }
+
+        size--;
+    }
+
+    public void mostrar() {
+
+        System.out.print("Cola Prioridad: ");
+
+        for (int i = 0; i < size; i++) {
+            System.out.print(cola[i] + " ");
+        }
+
+        System.out.println();
+    }
+}
+
+/////////////////////////////
+// MAIN
+/////////////////////////////
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        ColaCircular circular = new ColaCircular(5);
+        ColaEnlazada enlazada = new ColaEnlazada();
+        ColaPrioridad prioridad = new ColaPrioridad();
+
+        int opcion;
+
+        do {
+
+            System.out.println("\n===== MENU =====");
+            System.out.println("1. Cola Circular");
+            System.out.println("2. Cola Enlazada");
+            System.out.println("3. Cola Prioridad");
+            System.out.println("4. Salir");
+            System.out.print("Seleccione una opcion: ");
+
+            opcion = sc.nextInt();
+
+            switch(opcion) {
+
+                case 1:
+
+                    circular.enqueue(10);
+                    circular.enqueue(20);
+                    circular.enqueue(30);
+
+                    circular.mostrar();
+
+                    circular.dequeue();
+
+                    circular.mostrar();
+
+                    break;
+
+                case 2:
+
+                    enlazada.enqueue(5);
+                    enlazada.enqueue(15);
+                    enlazada.enqueue(25);
+
+                    enlazada.mostrar();
+
+                    enlazada.dequeue();
+
+                    enlazada.mostrar();
+
+                    break;
+
+                case 3:
+
+                    prioridad.enqueue(50);
+                    prioridad.enqueue(10);
+                    prioridad.enqueue(70);
+                    prioridad.enqueue(40);
+
+                    prioridad.mostrar();
+
+                    prioridad.dequeue();
+
+                    prioridad.mostrar();
+
+                    break;
+
+                case 4:
+                    System.out.println("Fin del programa");
+                    break;
+
+                default:
+                    System.out.println("Opcion incorrecta");
+            }
+
+        } while(opcion != 4);
+
+        sc.close();
+    }
+}
